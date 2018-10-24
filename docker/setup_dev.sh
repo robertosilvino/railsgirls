@@ -4,7 +4,11 @@
 
 ##/bin/bash -l -c 'echo \"${APP_NAME}\" > .ruby-gemset'
 
-/bin/bash -l -c "gem install bundler"
+# Recursive repository update
+/bin/bash -l -c "git submodule update"
+/bin/bash -l -c "git submodule --init --recursive"
+
+/bin/bash -l -c "gem install bundler rake"
 
 /bin/bash -l -c "RAILS_ENV=${RAILS_ENV} bundle config --global jobs $(($(getconf _NPROCESSORS_ONLN)*2))"
 

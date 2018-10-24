@@ -18,11 +18,8 @@ services:
     build:
       context: ../.
       dockerfile: docker/development/Dockerfile.base
-      args:
-        RUBY_VERSION: "2.2"
     image: robertosilvino/railsgirls-dev-base:latest
     environment:
-      - RUBY_VERSION_NUMBER
       - DOCKERIZED
       - DB_USERNAME
       - DB_PASSWORD
@@ -40,10 +37,8 @@ services:
     build:
       context: ../.
       dockerfile: docker/development/Dockerfile
-      args:
-        RUBY_VERSION: "2.2"
     image: robertosilvino/railsgirls-dev:latest
-#    user: ":${DOCKERGID}"
+    user: ":${DOCKERGID}"
     ports:
       - 3002:3000
     environment:
@@ -67,7 +62,31 @@ services:
 #      - worker
 #    secrets:
 #      - staging-database.yml
-    command: "./docker/init_dev_with_sidekiq.sh"
+    command: "./docker/init_dev.sh"
+
+  worker:
+    image: robertosilvino/railsgirls-dev:latest
+    environment:
+      - DOCKERIZED
+      - DB_USERNAME
+      - DB_PASSWORD
+      - DB_HOST_IP
+      - DB_PORT
+      - DB_DATABASENAME
+      - RAILS_ENV
+    volumes:
+      - ../.:/home/app/repo
+      - upload_dev:/home/app/repo/shared/uploads
+      - log_dev:/home/app/repo/shared/log
+      - bundle_dev:/home/app/repo/shared/bundle
+    depends_on:
+#      - db
+#      - ruby_base
+      - redis
+      - cache
+    command: "./docker/init_dev_sidekiq.sh"
+#    secrets:
+#      - staging-database.yml
 
   redis:
     image: redis:3.0-alpine
