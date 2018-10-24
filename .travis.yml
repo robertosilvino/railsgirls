@@ -29,7 +29,7 @@ script:
   - cd $HOME_DIR/docker
   - docker-compose -f docker-compose.yml build ruby_base
   - docker-compose -f docker-compose.yml build web
-  - docker-compose -f docker-compose.yml up -d web worker
+  - docker-compose -f docker-compose.yml up -d web
   - cd $HOME_DIR
   - docker ps -a
   - RAILS_ENV=test bundle install
