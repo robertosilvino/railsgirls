@@ -47,7 +47,7 @@ gem 'tzinfo-data'
 gem 'tzinfo'
 
 group :production do
-  gem 'passenger'
+  # gem 'passenger'
   gem 'execjs'
 end
 
