@@ -1,18 +1,20 @@
 ARG RUBY_VERSION="2.2"
 #FROM ruby:${RUBY_VERSION}-alpine3.7
-ARG ENV="production"
 
 FROM ubuntu:16.04
 # example: https://gist.github.com/zentetsukenz/5e330b801f983e3d39757686dcb41cc2
 
 # Set correct environment variables.
+ARG RUBY_VERSION="2.2"
+ARG ENV="development"
+
 ENV LANG pt_BR.UTF-8
 ENV LANGUAGE pt_BR
 ENV LC_CTYPE pt_BR.UTF-8
 ENV LC_ALL pt_BR.UTF-8
 
 #Para testes, update mais rápido. Tirar para produção.
-COPY docker/config/1604_etc_apt_sources.list /etc/apt/sources.list
+#COPY docker/config/1604_etc_apt_sources.list /etc/apt/sources.list
 
 ### Ubuntu
 RUN apt-get update \
@@ -46,7 +48,7 @@ COPY . ${REPO_DIR}/
 
 RUN mkdir -p ${APP_DIR}/public/uploads && \
     mkdir -p ${APP_DIR}/log && \
-    mkdir ${APP_DIR}/shared && \
+    mkdir -p ${APP_DIR}/shared && \
     ln -s ${APP_DIR}/log ${APP_DIR}/shared/. && \
     ln -s ${APP_DIR}/public/uploads ${APP_DIR}/shared/. && \
     ln -s ${GEM_PATH} ${APP_DIR}/shared/.
@@ -61,8 +63,10 @@ WORKDIR $REPO_DIR
 #### ruby
 RUN apt-add-repository ppa:brightbox/ruby-ng \
     && apt-get update \
-    && apt-get install -y ruby2.2 ruby2.2-dev ruby-switch \
-    && ruby-switch --set ruby2.2
+#    && apt-get install -y ruby2.2 ruby2.2-dev ruby-switch \
+#    && ruby-switch --set ruby2.2
+    && apt-get install -y ruby$RUBY_VERSION ruby${RUBY_VERSION}-dev ruby-switch \
+    && ruby-switch --set ruby$RUBY_VERSION
 
 RUN RAILS_ENV=${RAILS_ENV} gem install --no-rdoc --no-ri bundler rake && \
     RAILS_ENV=${RAILS_ENV} bundle config --global jobs "$(($(getconf _NPROCESSORS_ONLN)*2))" && \

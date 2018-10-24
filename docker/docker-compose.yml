@@ -19,6 +19,8 @@ services:
     build:
       context: ../.
       dockerfile: docker/development/Dockerfile.base
+      args:
+        RUBY_VERSION: "2.2"
     image: robertosilvino/railsgirls-dev-base:latest
     environment:
       - DOCKERIZED
