@@ -1,18 +1,23 @@
 version: '3'
 services:
-#  db:
-#    image: mysql/mysql-server:5.6
-#    volumes:
-#      - datavolume:/var/lib/mysql
-#    environment:
+  mysql:
+    image: mysql/mysql-server:5.6
+    volumes:
+      - db_test:/var/lib/mysql
+    environment:
+#      - DB_USERNAME
+#      - DB_PASSWORD
+#      - DB_HOST_IP
+#      - DB_PORT
+#      - DB_DATABASENAME
 #       MYSQL_ROOT_PASSWORD: root
 #       MYSQL_ROOT_HOST: "%"
-##       - MYSQL_ROOT_HOST='%'
-##       - MYSQL_ALLOW_EMPTY_PASSWORD=1
-##       - MYSQL_USER=root
-##       - MYSQL_PASSWORD=root
-#    ports:
-#      - 3307:3306
+       - MYSQL_ROOT_HOST=%
+       - MYSQL_ALLOW_EMPTY_PASSWORD=1
+#       - MYSQL_USER=travis
+#       - MYSQL_PASSWORD=''
+    ports:
+      - 3307:3306
 
   ruby_base:
     build:
@@ -52,8 +57,10 @@ services:
       - upload_dev:/home/app/repo/shared/uploads
       - log_dev:/home/app/repo/shared/log
       - bundle_dev:/home/app/repo/shared/bundle
+    links:
+      - mysql
     depends_on:
-#      - db
+      - mysql
       - redis
       - cache
 #    secrets:
@@ -76,4 +83,6 @@ volumes:
   upload_dev:
     driver: local
   log_dev:
+    driver: local
+  db_test:
     driver: local

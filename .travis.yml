@@ -1,6 +1,6 @@
 sudo: required
 
-language: ruby
+language: generic
 
 cache:
   bundler: true
@@ -10,10 +10,10 @@ cache:
 env:
   - DOCKER_COMPOSE_VERSION=1.21.2
 
-addons:
-  apt:
-    packages:
-      - docker-ce
+#addons:
+#  apt:
+#    packages:
+#      - docker-ce
 
 services:
   - mysql
@@ -26,10 +26,11 @@ before_install:
 
 script:
   - export HOME_DIR=$(pwd)
+  - export DB_HOST_IP=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
   - cd $HOME_DIR/docker
   - docker-compose -f docker-compose.yml build ruby_base
   - docker-compose -f docker-compose.yml build web
-  - docker-compose -f docker-compose.yml run web /bin/bash -c "./docker/setup_dev.sh && RAILS_ENV=test bundle exec rake test:all"
+  - docker-compose -f docker-compose.yml run web /bin/bash -c './docker/test.sh'
 
 before_script:
   - cp docker/.env.travis docker/.env
