@@ -13,10 +13,12 @@ development:
   database: railsgirls
   username: root
   password: root
+#  password: #m00m00
   port: 3306
+  host: 150.162.9.144
 #  host: 192.168.1.100
 #  host: 192.168.1.102
-  host: 192.168.15.11
+#  host: 192.168.15.11
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -35,16 +37,5 @@ production:
   port: 3306
 #  host: 192.168.1.100
 #  host: 192.168.1.102
-  host: 192.168.15.11
-
-#.env.travis
-## COMMON
-#DOCKERIZED=true
-#DB_PORT=3306
-
-## TEST
-#DB_USERNAME=travis
-#DB_PASSWORD=
-#DB_HOST_IP=127.0.0.1
-#RAILS_ENV=test
-#DB_DATABASENAME=railsgirls_test
+#  host: 192.168.15.11
+  host: 150.162.9.144

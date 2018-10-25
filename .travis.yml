@@ -29,13 +29,9 @@ script:
   - cd $HOME_DIR/docker
   - docker-compose -f docker-compose.yml build ruby_base
   - docker-compose -f docker-compose.yml build web
-  - docker-compose -f docker-compose.yml up -d web
-  - cd $HOME_DIR
-  - docker ps -a
-  - RAILS_ENV=test bundle install
-  - RAILS_ENV=test bundle exec rake db:create db:migrate --trace
-  - RAILS_ENV=test bundle exec rake test:all
+  - docker-compose -f docker-compose.yml run web /bin/bash -c "./docker/setup_dev.sh && RAILS_ENV=test bundle exec rake test:all"
 
 before_script:
   - cp docker/.env.travis docker/.env
-  - cp config/database.yml.travis config/database.yml
+  - cp config/database.yml.host config/database.yml
+  - cp config/sidekiq.yml.example config/sidekiq.yml

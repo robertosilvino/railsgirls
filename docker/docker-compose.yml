@@ -22,7 +22,6 @@ services:
         RUBY_VERSION: "2.2"
     image: robertosilvino/railsgirls-dev-base:latest
     environment:
-      - RUBY_VERSION_NUMBER
       - DOCKERIZED
       - DB_USERNAME
       - DB_PASSWORD
@@ -30,11 +29,6 @@ services:
       - DB_PORT
       - DB_DATABASENAME
       - RAILS_ENV
-    volumes:
-      - ../.:/home/app/repo
-      - upload_dev:/home/app/repo/shared/uploads
-      - log_dev:/home/app/repo/shared/log
-      - bundle_dev:/home/app/repo/shared/bundle
 
   web:
     build:
@@ -43,7 +37,6 @@ services:
       args:
         RUBY_VERSION: "2.2"
     image: robertosilvino/railsgirls-dev:latest
-#    user: ":${DOCKERGID}"
     ports:
       - 3002:3000
     environment:
@@ -61,10 +54,8 @@ services:
       - bundle_dev:/home/app/repo/shared/bundle
     depends_on:
 #      - db
-#      - ruby_base
       - redis
       - cache
-#      - worker
 #    secrets:
 #      - staging-database.yml
     command: "./docker/init_dev_with_sidekiq.sh"

@@ -27,18 +27,12 @@ services:
       - DB_PORT
       - DB_DATABASENAME
       - RAILS_ENV
-    volumes:
-      - ../.:/home/app/repo
-      - upload_dev:/home/app/repo/shared/uploads
-      - log_dev:/home/app/repo/shared/log
-      - bundle_dev:/home/app/repo/shared/bundle
 
   web:
     build:
       context: ../.
       dockerfile: docker/development/Dockerfile
     image: robertosilvino/railsgirls-dev:latest
-    user: ":${DOCKERGID}"
     ports:
       - 3002:3000
     environment:

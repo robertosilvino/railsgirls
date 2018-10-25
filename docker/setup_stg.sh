@@ -23,6 +23,6 @@
 /bin/bash -l -c "RAILS_ENV=${RAILS_ENV} bundle exec rake assets:precompile"
 ##./docker/change_owner_user.sh
 
-/bin/sh -c "./docker/start.sh"
+/bin/sh -c "./docker/start_db.sh"
 ##vim
 ##su -c "/bin/bash -l -c 'RAILS_ENV=${RAILS_ENV} bundle config --global'" app
