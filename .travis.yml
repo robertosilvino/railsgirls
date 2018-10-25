@@ -29,7 +29,7 @@ script:
   - cd $HOME_DIR/docker
   - docker-compose -f docker-compose.yml build ruby_base
   - docker-compose -f docker-compose.yml build web
-  - docker-compose -f docker-compose.yml run web /bin/bash -c "./docker/setup_dev.sh && RAILS_ENV=test bundle exec rake test:all"
+  - docker-compose -f docker-compose.yml run web /bin/bash -c "./docker/test.sh"
 
 before_script:
   - cp docker/.env.travis docker/.env
