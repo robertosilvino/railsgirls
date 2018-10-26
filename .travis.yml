@@ -15,23 +15,27 @@ env:
 #    packages:
 #      - docker-ce
 
-services:
-  - mysql
+#services:
+#  - mysql
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-
-script:
   - export HOME_DIR=$(pwd)
-#  - export DB_HOST_IP=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
-  - export DB_HOST_IP=127.0.0.1
+  - export DB_HOST_IP=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
+#  - export DB_HOST_IP=127.0.0.1
   - cd $HOME_DIR/docker
   - docker-compose -f docker-compose.yml build ruby_base
   - docker-compose -f docker-compose.yml build web
+  - docker-compose -f docker-compose.yml up -d mysql
+  - cd $HOME_DIR/
+
+script:
+  - cd $HOME_DIR/docker
   - docker-compose -f docker-compose.yml run web /bin/bash -c './docker/test.sh'
+  - cd $HOME_DIR/
 
 before_script:
   - cp docker/.env.travis docker/.env
