@@ -26,7 +26,8 @@ before_install:
 
 script:
   - export HOME_DIR=$(pwd)
-  - export DB_HOST_IP=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
+#  - export DB_HOST_IP=$(ip route get 8.8.8.8 | awk '{print $NF; exit}')
+  - export DB_HOST_IP=127.0.0.1
   - cd $HOME_DIR/docker
   - docker-compose -f docker-compose.yml build ruby_base
   - docker-compose -f docker-compose.yml build web
