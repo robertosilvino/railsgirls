@@ -2,6 +2,23 @@ sudo: required
 
 language: generic
 
+git:
+  depth: 5
+  quiet: true
+  submodules: true
+
+# blocklist
+branches:
+  except:
+  - legacy
+  - experimental
+
+# safelist
+branches:
+  only:
+  - master
+  - stable
+
 cache:
   bundler: true
 #  directories:
