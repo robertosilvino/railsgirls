@@ -5,12 +5,11 @@ services:
     volumes:
       - db_test:/var/lib/mysql
     environment:
-#       MYSQL_ROOT_PASSWORD: root
-#       MYSQL_ROOT_HOST: "%"
+##       - MYSQL_ROOT_PASSWORD: root
        - MYSQL_ROOT_HOST=%
        - MYSQL_ALLOW_EMPTY_PASSWORD=1
-#       - MYSQL_USER=travis
-#       - MYSQL_PASSWORD=
+##       - MYSQL_USER=travis
+##       - MYSQL_PASSWORD=
     ports:
       - 3307:3306
 
@@ -55,22 +54,14 @@ services:
 #    links:
 #      - mysql
     depends_on:
-#      - mysql
       - redis
       - cache
-#    secrets:
-#      - staging-database.yml
     command: "./docker/init_dev_with_sidekiq.sh"
 
   redis:
     image: redis:3.0-alpine
   cache:
     image: memcached:alpine
-
-#secrets:
-#  staging-database.yml:
-##    external: true
-#    file: ./staging/secret/database.yml
 
 volumes:
   bundle_dev:
