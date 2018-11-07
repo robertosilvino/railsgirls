@@ -1,0 +1,69 @@
+version: '3'
+services:
+#  db:
+##    image: mariadb:10.1
+#    image: mysql/mysql-server:5.6
+#    volumes:
+#      - datavolume:/var/lib/mysql
+#    environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_ROOT_HOST: "%"
+##       - MYSQL_ROOT_HOST='%'
+##       - MYSQL_ALLOW_EMPTY_PASSWORD=1
+##       - MYSQL_USER=root
+##       - MYSQL_PASSWORD=root
+#    ports:
+#      - 3307:3306
+  web_passenger:
+#    restart: always
+    build:
+      context: ../.
+      dockerfile: docker/staging_passenger/Dockerfile
+    image: robertosilvino/railsgirls_passenger:latest
+    ports:
+      - 1081:80
+      - 1443:443
+      - 3002:3000
+    environment:
+      - DOCKERIZED
+      - DB_USERNAME
+      - DB_PASSWORD
+      - DB_HOST_IP
+      - DB_PORT
+      - DB_DATABASENAME
+      - RAILS_ENV
+#    volumes:
+#      - assets_stg:/home/app/repo/shared/assets
+#      - upload_stg:/home/app/repo/shared/uploads
+#      - log_stg:/home/app/repo/shared/log
+#      - bundle_stg:/home/app/repo/shared/bundle
+    depends_on:
+#      - db
+      - redis
+      - cache
+#      - worker
+#    secrets:
+#      - staging-database.yml
+#    command: "./docker/init_stg.sh"
+
+  redis:
+    image: redis:3.0-alpine
+  cache:
+    image: memcached:alpine
+
+#secrets:
+#  staging-database.yml:
+##    external: true
+#    file: ./staging/secret/database.yml
+#volumes:
+#  datavolume:
+#    driver: "local"
+volumes:
+  assets_stg:
+    driver: local
+  bundle_stg:
+    driver: local
+  log_stg:
+    driver: local
+  upload_stg:
+    driver: local
