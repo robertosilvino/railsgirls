@@ -90,6 +90,13 @@ RUN chown app:app -R /usr/local/rvm
 #chmod -R 777  /usr/local/rvm
 USER app
 
+RUN mkdir -p ${APP_DIR}/public/uploads
+RUN mkdir -p ${APP_DIR}/public/assets
+RUN mkdir -p ${APP_DIR}/log
+RUN touch ${APP_DIR}/log/${RAILS_ENV}.log
+RUN touch ${APP_DIR}/log/sidekiq.log
+RUN mkdir -p ${APP_DIR}/tmp/pids
+
 ### Development
 # RUN apt-get install -y libcurl4-openssl-dev
 # RUN RAILS_ENV=${RAILS_ENV} bundle install --without production --with test development
@@ -100,10 +107,10 @@ RUN RAILS_ENV=${RAILS_ENV} bundle config --local BUNDLE_WIITHOUT "development:te
     && RAILS_ENV=${RAILS_ENV} bundle config --local BUNDLE_PATH: "${APP_DIR}/bundle" \
     && RAILS_ENV=${RAILS_ENV} bundle config --local BUNDLE_DISABLE_SHARED_GEMS: "true" \
     && RAILS_ENV=${RAILS_ENV} bundle config --local BUNDLE_FROZEN: "true"
-RUN RAILS_ENV=${RAILS_ENV} bundle install --without test development --with production
-#RUN RAILS_ENV=${RAILS_ENV} bundle exec rake assets:clobber
-#RUN RAILS_ENV=${RAILS_ENV} bundle exec rake tmp:clear
-RUN RAILS_ENV=${RAILS_ENV} bundle exec rake assets:precompile
+#RUN RAILS_ENV=${RAILS_ENV} bundle install --without test development --with production
+###RUN RAILS_ENV=${RAILS_ENV} bundle exec rake assets:clobber
+###RUN RAILS_ENV=${RAILS_ENV} bundle exec rake tmp:clear
+#RUN RAILS_ENV=${RAILS_ENV} bundle exec rake assets:precompile
 
 USER root
 ## sidekiq
